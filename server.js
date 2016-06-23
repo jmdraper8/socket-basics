@@ -13,7 +13,7 @@ io.on('connection', function (socket) {
 		console.log('Message recieved: ' + message.text);
 
 		//io.emmit; will send the message to everyone including the sender
-		socket.broadcast.emit('message', message);
+		io.emit('message', message);
 	});
 
 	socket.emit('message', {
@@ -23,4 +23,4 @@ io.on('connection', function (socket) {
 
 http.listen(PORT, function () {
 	console.log('Server started on port: ' + PORT);
-}); 
+});
