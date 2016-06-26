@@ -35,6 +35,42 @@ function sendCurrentUsers (socket) {
 
 //Add provate command
 
+function sendPrivateMessage (message, socket) {
+	var info = clientInfo[socket.id];
+	var targetUser = (message.text.split(' '))[1];
+	var users = [];
+
+	if (typeof info === 'undefined') {
+		return;
+	}
+
+
+
+	Object.keys(clientInfo).forEach (function (socketId) {
+		var userInfo = clientInfo[socketId];
+
+		if (info.room === userInfo.room) {
+			users.push(userInfo.name);
+			if (targetUser === userInfo.name) {
+				if (io.sockets.connected[socketId]) {
+    				io.sockets.connected[socketId].emit('message', {
+    					name: message.name,
+    					text: message.text.split(' ').slice(2).join(' '),
+    					timestamp: moment().valueOf()
+    				});
+				}
+			}
+		}
+	});
+
+	// console.log((message.text.split(' '))[1]);
+	// console.log(message.text.split(' ').slice(2).join(' '));
+	// //console.log(socket);
+
+
+
+}
+
 io.on('connection', function (socket) {
 	console.log('User connectiod via socket.io!');
 
@@ -69,6 +105,8 @@ io.on('connection', function (socket) {
 
 		if (message.text === '@currentUsers') {
 			sendCurrentUsers(socket);
+		} else if (message.text.startsWith('@private')) {
+			sendPrivateMessage(message, socket);
 		} else {
 			message.timestamp = moment().valueOf();
 			//io.emmit; will send the message to everyone including the sender
