@@ -33,7 +33,7 @@ function sendCurrentUsers (socket) {
 	});
 }
 
-//Add provate command
+//Add private command
 
 function sendPrivateMessage (message, socket) {
 	var info = clientInfo[socket.id];
@@ -62,13 +62,6 @@ function sendPrivateMessage (message, socket) {
 			}
 		}
 	});
-
-	// console.log((message.text.split(' '))[1]);
-	// console.log(message.text.split(' ').slice(2).join(' '));
-	// //console.log(socket);
-
-
-
 }
 
 io.on('connection', function (socket) {
